@@ -1,0 +1,11 @@
+0.7
+2020.2
+Nov  8 2024
+22:36:57
+C:/repos/APS/Labs/01. Adder/lab_01.tb_fulladder.sv,1740929519,systemVerilog,,,,lab_01_tb_fulladder,,uvm,,,,,,
+C:/repos/APS/Labs/01. Adder/lab_01.tb_fulladder32.sv,1740929519,systemVerilog,,,,lab_01_tb_fulladder32,,uvm,,,,,,
+C:/repos/APS/Labs/01. Adder/lab_01.tb_fulladder4.sv,1740929519,systemVerilog,,,,lab_01_tb_fulladder4,,uvm,,,,,,
+C:/repos/aps_labs/labs/01_adder/01_adder.sim/sim_1/behav/xsim/glbl.v,1724786425,verilog,,,,glbl,,uvm,,,,,,
+C:/repos/aps_labs/labs/01_adder/01_adder.srcs/sources_1/new/fulladder.sv,1741541490,systemVerilog,,C:/repos/aps_labs/labs/01_adder/01_adder.srcs/sources_1/new/fulladder32.sv,,fulladder,,uvm,,,,,,
+C:/repos/aps_labs/labs/01_adder/01_adder.srcs/sources_1/new/fulladder32.sv,1741544352,systemVerilog,,C:/repos/aps_labs/labs/01_adder/01_adder.srcs/sources_1/new/fulladder4.sv,,fulladder32,,uvm,,,,,,
+C:/repos/aps_labs/labs/01_adder/01_adder.srcs/sources_1/new/fulladder4.sv,1741543333,systemVerilog,,C:/repos/APS/Labs/01. Adder/lab_01.tb_fulladder32.sv,,fulladder4,,uvm,,,,,,
