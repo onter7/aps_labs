@@ -1,0 +1,9 @@
+0.7
+2020.2
+Dec 15 2024
+09:05:09
+C:/repos/APS/Labs/01. Adder/lab_01.tb_fulladder.sv,1740929519,systemVerilog,,,,lab_01_tb_fulladder,,uvm,,,,,,
+C:/repos/APS/Labs/01. Adder/lab_01.tb_fulladder32.sv,1740929519,systemVerilog,,,,lab_01_tb_fulladder32,,uvm,,,,,,
+C:/repos/aps_labs/labs/risc_v_cpu/risc_v_cpu.sim/sim_1/behav/xsim/glbl.v,1724786425,verilog,,,,glbl,,uvm,,,,,,
+C:/repos/aps_labs/labs/risc_v_cpu/risc_v_cpu.srcs/sources_1/new/fulladder.sv,1741895628,systemVerilog,,C:/repos/aps_labs/labs/risc_v_cpu/risc_v_cpu.srcs/sources_1/new/fulladder32.sv,,fulladder,,uvm,,,,,,
+C:/repos/aps_labs/labs/risc_v_cpu/risc_v_cpu.srcs/sources_1/new/fulladder32.sv,1741896504,systemVerilog,,C:/repos/APS/Labs/01. Adder/lab_01.tb_fulladder32.sv,,fulladder32,,uvm,,,,,,
