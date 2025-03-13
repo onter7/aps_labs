@@ -1,4 +1,4 @@
-module fulladder32(
+module fulladder32 (
     input  logic [31:0] a_i,
     input  logic [31:0] b_i,
     input  logic        carry_i,
