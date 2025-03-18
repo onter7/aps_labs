@@ -8,7 +8,7 @@ module CYBERcobra(
     logic [31:0] pc;    
     logic [31:0] fa_sum;
     logic [31:0] fa_op2;
-    logic [31:0] imem_o;
+    logic [31:0] instruction;
     logic [31:0] alu_res;
     logic        alu_flag;
     logic        rf_we;
@@ -18,14 +18,14 @@ module CYBERcobra(
     logic        fa_sel;
     logic [1:0]  wd_sel;
     
-    assign rf_we  = !(imem_o[30] | imem_o[31]);
-    assign fa_sel = (alu_flag & imem_o[30]) | imem_o[31];
-    assign wd_sel = imem_o[29:28];
+    assign rf_we  = !(instruction[30] | instruction[31]);
+    assign fa_sel = (alu_flag & instruction[30]) | instruction[31];
+    assign wd_sel = instruction[29:28];
     
     always_comb begin
         case (fa_sel)
-            1'd0: fa_op2 = 32'd4;
-            1'd1: fa_op2 = { {22{imem_o[12]}}, imem_o[12:5], 2'b0 };
+            1'b0: fa_op2 = 32'd4;
+            1'b1: fa_op2 = { {22{instruction[12]}}, instruction[12:5], 2'b0 };
         endcase
     end
     
@@ -37,25 +37,21 @@ module CYBERcobra(
     );
         
     always_ff @(posedge clk_i) begin
-        if (rst_i) begin
-            pc <= 32'd0;
-        end
-        else begin
-            pc <= fa_sum;
-        end
+        if (rst_i) pc <= 32'd0;
+        else pc <= fa_sum;
     end
         
     instr_mem imem(
         .read_addr_i(pc),
-        .read_data_o(imem_o)
+        .read_data_o(instruction)
     );
     
     register_file reg_file(
         .clk_i(clk_i),
         .write_enable_i(rf_we),
-        .write_addr_i(imem_o[4:0]),
-        .read_addr1_i(imem_o[22:18]),
-        .read_addr2_i(imem_o[17:13]),
+        .write_addr_i(instruction[4:0]),
+        .read_addr1_i(instruction[22:18]),
+        .read_addr2_i(instruction[17:13]),
         .write_data_i(rf_wd),
         .read_data1_o(rf_rd1),
         .read_data2_o(rf_rd2)
@@ -64,17 +60,17 @@ module CYBERcobra(
     alu alu(
         .a_i(rf_rd1),
         .b_i(rf_rd2),
-        .alu_op_i(imem_o[27:23]),
+        .alu_op_i(instruction[27:23]),
         .flag_o(alu_flag),
         .result_o(alu_res)
     );
     
     always_comb begin
         case (wd_sel)
-            1'd0: rf_wd = { {9{imem_o[27]}}, imem_o[27:5] };
-            1'd1: rf_wd = alu_res;
-            1'd2: rf_wd = { {16{sw_i[15]}}, sw_i };
-            1'd3: rf_wd = 32'd0;
+            2'b00: rf_wd = { {9{instruction[27]}}, instruction[27:5] };
+            2'b01: rf_wd = alu_res;
+            2'b10: rf_wd = { {16{sw_i[15]}}, sw_i };
+            2'b11: rf_wd = 32'b0;
         endcase
     end
     
