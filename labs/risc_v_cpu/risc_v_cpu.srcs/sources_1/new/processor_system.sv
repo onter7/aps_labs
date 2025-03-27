@@ -5,13 +5,20 @@ module processor_system(
 
     logic [31:0] instr_addr;
     logic [31:0] instr;
-    logic        mem_req;
-    logic        mem_we;
-    logic [31:0] mem_wd;
-    logic [31:0] mem_addr;
-    logic [31:0] mem_rd;
-    
+    logic        core_lsu_req;
+    logic        lsu_dm_req;
+    logic        core_lsu_we;
+    logic        lsu_dm_we;
+    logic [2:0]  core_lsu_size;
+    logic [3:0]  lsu_dm_be;
+    logic [31:0] core_lsu_wd;
+    logic [31:0] lsu_dm_wd;
+    logic [31:0] core_lsu_addr;
+    logic [31:0] lsu_dm_addr;
+    logic [31:0] lsu_core_rd;
+    logic [31:0] dm_lsu_rd;    
     logic        stall;
+    logic        ready;
     
     instr_mem imem(
         .read_addr_i(instr_addr),
@@ -21,33 +28,45 @@ module processor_system(
     processor_core core(
         .clk_i(clk_i),
         .rst_i(rst_i),
-        .stall_i(~stall & mem_req),
+        .stall_i(stall),
         .instr_i(instr),
-        .mem_rd_i(mem_rd),
+        .mem_rd_i(lsu_core_rd),
         .instr_addr_o(instr_addr),
-        .mem_addr_o(mem_addr),
-        .mem_req_o(mem_req),
-        .mem_we_o(mem_we),
-        .mem_wd_o(mem_wd)
+        .mem_addr_o(core_lsu_addr),
+        .mem_req_o(core_lsu_req),
+        .mem_we_o(core_lsu_we),
+        .mem_wd_o(core_lsu_wd),
+        .mem_size_o(core_lsu_size)
     );
     
     data_mem ram(
         .clk_i(clk_i),
-        .mem_req_i(mem_req),
-        .write_enable_i(mem_we),
-        .byte_enable_i(4'b1111),
-        .addr_i(mem_addr),
-        .write_data_i(mem_wd),
-        .read_data_o(mem_rd)
+        .mem_req_i(lsu_dm_req),
+        .write_enable_i(lsu_dm_we),
+        .byte_enable_i(lsu_dm_be),
+        .addr_i(lsu_dm_addr),
+        .write_data_i(lsu_dm_wd),
+        .read_data_o(dm_lsu_rd),
+        .ready_o(ready)
     );
     
-    always_ff @(posedge clk_i) begin
-        if (rst_i) begin
-            stall <= 0;
-        end
-        else begin
-            stall <= ~stall & mem_req;
-        end
-    end
+    lsu lsu(
+        .clk_i(clk_i),
+        .rst_i(rst_i),
+        .core_req_i(core_lsu_req),
+        .core_we_i(core_lsu_we),
+        .core_size_i(core_lsu_size),
+        .core_addr_i(core_lsu_addr),
+        .core_wd_i(core_lsu_wd),
+        .core_rd_o(lsu_core_rd),
+        .core_stall_o(stall),
+        .mem_req_o(lsu_dm_req),
+        .mem_we_o(lsu_dm_we),
+        .mem_be_o(lsu_dm_be),
+        .mem_addr_o(lsu_dm_addr),
+        .mem_wd_o(lsu_dm_wd),
+        .mem_rd_i(dm_lsu_rd),
+        .mem_ready_i(ready)
+    );
 
 endmodule
