@@ -35,9 +35,17 @@ module interrupt_controller(
         else irq_h <= ~reset_irq & set_irq;
     end
     
-    assign irq_cause_o = 32'h8000_0010;
-    assign irq_ret_o = reset_exc & ~set_exc;
     assign irq = (irq_req_i & mie_i) & ~(set_exc | irq_h);
-    assign irq_o = irq; 
+    
+    daisy_chain daisy_chain(
+        .clk_i(clk_i),
+        .rst_i(rst_i),
+        .masked_irq_i(irq_req_i & mie_i),
+        .irq_ret_i(mret_i & ~(set_exc)),
+        .ready_i(~(set_exc | irq_h)),
+        .irq_ret_o(irq_ret_o),
+        .irq_cause_o(irq_cause_o),
+        .irq_o(irq_o)
+    );
 
 endmodule
